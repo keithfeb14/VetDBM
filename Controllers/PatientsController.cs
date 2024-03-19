@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VetDBM.Data;
 using VetDBM.Models;
@@ -77,6 +78,7 @@ namespace VetDBM.Controllers
 
             return View(patient);
         }
+
 
         // GET: Patients/Create
         public IActionResult Create()
