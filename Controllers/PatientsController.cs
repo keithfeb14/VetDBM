@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VetDBM.Data;
 using VetDBM.Models;
@@ -31,11 +26,39 @@ namespace VetDBM.Controllers
             return View();
         }
 
-        // PoST: Patients/ShowSearchResults
-        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        //// PoST: Patients/ShowSearchResults
+        //public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        //{
+        //    return View("Index", await _context.Patient.Where(p => p.Name.Contains(SearchPhrase)).ToListAsync());
+        //}
+
+        // POST: Patients/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(string Name, int? PatientId)
         {
-            return View("Index" ,await _context.Patient.Where( p => p.Name.Contains(SearchPhrase) ).ToListAsync());
+            if (!string.IsNullOrEmpty(Name))
+            {
+                // Search by name
+                var resultsByName = await _context.Patient
+                                                  .Where(p => p.Name.Contains(Name))
+                                                  .ToListAsync();
+                return View("Index", resultsByName);
+            }
+            else if (PatientId.HasValue)
+            {
+                // Search by ID
+                var resultsById = await _context.Patient
+                                                .Where(p => p.Id == PatientId.Value)
+                                                .ToListAsync();
+                return View("Index", resultsById);
+            }
+            else
+            {
+                // No search criteria provided, return default view or an empty list
+                // Depending on your application's requirements, you might want to return all patients or an empty list
+                return View("Index", new List<Patient>());
+            }
         }
+
 
         // GET: Patients/Details/5
         public async Task<IActionResult> Details(int? id)
