@@ -25,6 +25,18 @@ namespace VetDBM.Controllers
             return View(await _context.Patient.ToListAsync());
         }
 
+        // GET: Patients/ShowSearchForm
+        public async Task<IActionResult> ShowSearchForm()
+        {
+            return View();
+        }
+
+        // PoST: Patients/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        {
+            return View("Index" ,await _context.Patient.Where( p => p.Name.Contains(SearchPhrase) ).ToListAsync());
+        }
+
         // GET: Patients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
